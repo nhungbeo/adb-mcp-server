@@ -46,7 +46,7 @@ class AdbMcpServer {
         },
         {
           name: "capture_screenshot",
-          description: "Capture screenshot from connected Android device",
+          description: "Capture screenshot from connected Android device. Tên đặt theo định dạng: ngaythangnam_gio_phut_giay.png",
           inputSchema: {
             type: "object",
             properties: {
