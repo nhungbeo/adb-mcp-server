@@ -19,6 +19,24 @@ export async function checkAdbAvailable(): Promise<boolean> {
 }
 
 /**
+ * Executes an ADB command
+ * @param {string} command - The ADB command to execute
+ * @returns {Promise<string>} - The result of the command
+ */
+export async function executeAdbCommand(command: string): Promise<void> {
+  try {
+    const { stdout, stderr } = await execPromise(command);
+    if (stderr) {
+      console.error(`ADB command ${command} stderr: ${stderr}`);
+    }
+    console.log(`ADB command ${command} stdout: ${stdout}`);
+  } catch (error) {
+    console.error(`Error executing ADB command ${command}:`, error);
+    throw new Error(`Failed to execute ADB command: ${command}. Make sure ADB is installed and in your PATH.`);
+  }
+}
+
+/**
  * Lists all connected Android devices
  * @returns {Promise<Device[]>} - Array of connected devices with their details
  */

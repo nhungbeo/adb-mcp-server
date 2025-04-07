@@ -34,3 +34,8 @@ export interface ScreenshotParams {
   deviceId: string;
   savePath: string;
 }
+
+export interface UiElementsParams {
+  deviceId: string;
+  savePath?: string;
+}

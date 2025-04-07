@@ -5,6 +5,7 @@ import { CallToolRequestSchema, ListToolsRequestSchema, ErrorCode, McpError } fr
 import { randomUUID } from "crypto";
 import { handleDeviceListRequest } from "./handlers/deviceList";
 import { handleScreenshotRequest } from "./handlers/screenshot";
+import { handleUiElementsRequest } from "./handlers/uiElements";
 
 class AdbMcpServer {
   private server: Server;
@@ -62,6 +63,20 @@ class AdbMcpServer {
             required: ["deviceId", "path"],
           },
         },
+        {
+          name: "get_ui_elements",
+          description: "Get all UI elements from connected Android device",
+          inputSchema: {
+            type: "object",
+            properties: {
+              deviceId: {
+                type: "string",
+                description: "Device ID to get UI elements from",
+              },
+            },
+            required: ["deviceId"],
+          },
+        },
       ],
     }));
 
@@ -102,6 +117,28 @@ class AdbMcpServer {
                 {
                   type: "text",
                   text: `Screenshot captured and saved to ${response.result?.filePath}`,
+                },
+              ],
+            };
+          }
+          case "get_ui_elements": {
+            if (!request.params.arguments?.deviceId) {
+              throw new McpError(ErrorCode.InvalidParams, "Missing required parameter: deviceId");
+            }
+
+            const response = await handleUiElementsRequest({
+              id: randomUUID(),
+              method: "get_ui_elements",
+              params: {
+                deviceId: request.params.arguments.deviceId,
+              },
+            });
+
+            return {
+              content: [
+                {
+                  type: "text",
+                  text: JSON.stringify(response.result?.xml, null, 2),
                 },
               ],
             };
