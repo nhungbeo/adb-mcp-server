@@ -39,3 +39,8 @@ export interface UiElementsParams {
   deviceId: string;
   savePath?: string;
 }
+
+export interface ExecuteAdbCommandParams {
+  deviceId: string;
+  command: string;
+}

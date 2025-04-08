@@ -6,6 +6,7 @@ import { randomUUID } from "crypto";
 import { handleDeviceListRequest } from "./handlers/deviceList";
 import { handleScreenshotRequest } from "./handlers/screenshot";
 import { handleUiElementsRequest } from "./handlers/uiElements";
+import { executeAdbCommand } from "./utils/adb";
 
 class AdbMcpServer {
   private server: Server;
@@ -61,6 +62,24 @@ class AdbMcpServer {
               },
             },
             required: ["deviceId", "path"],
+          },
+        },
+        {
+          name: "execute_adb_command",
+          description: "Execute an ADB command on a connected Android device",
+          inputSchema: {
+            type: "object",
+            properties: {
+              deviceId: {
+                type: "string",
+                description: "Device ID to execute the command on",
+              },
+              command: {
+                type: "string",
+                description: "The ADB command to execute",
+              },
+            },
+            required: ["deviceId", "command"],
           },
         },
         {
@@ -139,6 +158,25 @@ class AdbMcpServer {
                 {
                   type: "text",
                   text: JSON.stringify(response.result?.xml, null, 2),
+                },
+              ],
+            };
+          }
+          case "execute_adb_command": {
+            if (!request.params.arguments?.deviceId || !request.params.arguments?.command) {
+              throw new McpError(ErrorCode.InvalidParams, "Missing required parameters: deviceId and command");
+            }
+
+            const deviceId = request.params.arguments.deviceId;
+            const command = request.params.arguments.command;
+
+            const result = await executeAdbCommand(`adb -s ${deviceId} ${command}`);
+
+            return {
+              content: [
+                {
+                  type: "text",
+                  text: result,
                 },
               ],
             };
