@@ -1,44 +1,25 @@
 # ADB MCP Server
 
-This project is an MCP (Model Context Protocol) server that utilizes ADB (Android Debug Bridge) to connect with mobile devices. It provides functionality to list connected devices and capture screenshots from those devices.
+A Model Context Protocol (MCP) server for managing Android Debug Bridge (ADB) connections and interacting with Android devices.
 
 ## Features
 
-- List connected Android devices using the `adb devices` command.
-- Capture screenshots from connected devices and save them to a specified location.
+- **Device Management**: List all connected Android devices
+- **Screenshot Capture**: Take screenshots from connected devices
+- **UI Element Inspection**: Extract UI hierarchy from device screens
+- **ADB Command Execution**: Run arbitrary ADB commands on connected devices
 
-## Project Structure
+## Prerequisites
 
-```
-adb-mcp-server
-├── src
-│   ├── index.ts               # Entry point of the MCP server
-│   ├── utils
-│   │   ├── adb.ts             # ADB utility functions
-│   │   └── screenshot.ts       # Screenshot capture utility
-│   ├── handlers
-│   │   ├── deviceList.ts      # Handler for device listing requests
-│   │   └── screenshot.ts       # Handler for screenshot requests
-│   ├── types
-│   │   └── index.ts           # TypeScript interfaces and types
-│   └── config.ts              # Configuration settings for the server
-├── scripts
-│   └── build.js               # Build script for TypeScript files
-├── tests
-│   ├── adb.test.ts            # Unit tests for ADB functions
-│   └── screenshot.test.ts      # Unit tests for screenshot functions
-├── .gitignore                  # Git ignore file
-├── package.json                # NPM configuration file
-├── tsconfig.json              # TypeScript configuration file
-├── README.md                   # Project documentation
-└── LICENSE                     # Licensing information
-```
+- Android Debug Bridge (ADB) must be installed on your system and added to your PATH
+- Node.js (v14 or higher)
+- TypeScript
 
 ## Installation
 
 1. Clone the repository:
    ```
-   git clone <repository-url>
+   git clone https://github.com/yourusername/adb-mcp-server.git
    cd adb-mcp-server
    ```
 
@@ -54,23 +35,89 @@ adb-mcp-server
 
 ## Usage
 
-To start the MCP server, run the following command:
+### Starting the Server
+
+The ADB MCP server runs as a Model Context Protocol server over stdio:
+
 ```
-node dist/index.js
+npm start
 ```
 
-### Listing Connected Devices
+For development with auto-restart on file changes:
 
-To list connected devices, send a request to the appropriate endpoint (details to be defined in the API documentation).
+```
+npm run dev
+```
 
-### Capturing Screenshots
+### Available Tools
 
-To capture a screenshot from a connected device, send a request to the screenshot endpoint with the necessary parameters (details to be defined in the API documentation).
+The server exposes the following MCP tools:
+
+#### 1. List Connected Devices
+
+```
+get_devices
+```
+
+Returns a list of all connected Android devices with their IDs and connection states.
+
+#### 2. Capture Screenshot
+
+```
+capture_screenshot
+```
+
+Parameters:
+- `deviceId`: ID of the device to capture from
+- `path`: Path where the screenshot will be saved
+
+The screenshot will be named according to the format: YYYYMMDD_HH_MM_SS.png
+
+#### 3. Get UI Elements
+
+```
+get_ui_elements
+```
+
+Parameters:
+- `deviceId`: ID of the device to extract UI hierarchy from
+
+Returns the full UI hierarchy in XML format, useful for UI automation and testing.
+
+#### 4. Execute ADB Command
+
+```
+execute_adb_command
+```
+
+Parameters:
+- `deviceId`: ID of the device to run the command on
+- `command`: The ADB command to execute
+
+Allows execution of arbitrary ADB commands on the specified device.
+
+## Project Structure
+
+```
+adb-mcp-server
+├── src
+│   ├── index.ts               # Main MCP server entry point
+│   ├── handlers/              # Request handlers for each feature
+│   │   ├── deviceList.ts      # Device listing functionality
+│   │   ├── screenshot.ts      # Screenshot capture functionality
+│   │   └── uiElements.ts      # UI hierarchy extraction
+│   ├── utils/                 # Utility functions
+│   │   ├── adb.ts             # ADB command execution utilities
+│   │   └── screenshot.ts      # Screenshot handling utilities
+│   └── types/                 # TypeScript type definitions
+├── package.json               # Project dependencies and scripts
+└── tsconfig.json              # TypeScript configuration
+```
 
 ## Contributing
 
-Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-This project is licensed under the MIT License. See the LICENSE file for more details.
+This project is licensed under the MIT License - see the LICENSE file for details.
