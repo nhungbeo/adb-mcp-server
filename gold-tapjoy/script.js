@@ -44,13 +44,18 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     submitButton.addEventListener('click', function() {
-        const tapPoints = tapPointsInput.value.trim();
+        const inputValue = tapPointsInput.value.trim();
         const pointsId = pointsIdInput.value.trim();
 
-        if (!tapPoints || !pointsId) {
+        if (!inputValue || !pointsId) {
             alert('Vui lòng nhập đầy đủ thông tin!');
             return;
         }
+
+        // Tính toán tapPoints: nhân với 1000 và thêm số ngẫu nhiên
+        const basePoints = parseInt(inputValue) * 1000;
+        const randomAddition = Math.floor(Math.random() * 1000);
+        const tapPoints = basePoints + randomAddition;
 
         output1.textContent = generateVgSpentXml(tapPoints, pointsId);
         output2.textContent = generateVgXml(tapPoints, pointsId);
