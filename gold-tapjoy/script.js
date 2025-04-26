@@ -10,13 +10,13 @@ document.addEventListener('DOMContentLoaded', function() {
         return `<?xml version="1.0" encoding="UTF-8"?>
 <TapjoyConnectReturnObject>
     <UserAccountObject>
-        <TapPoints>
-            ${tapPoints}
-        </TapPoints>
-        <CurrencyName>
-            Golden Credits
-        </CurrencyName>
-        <PointsID>${pointsId}</PointsID>
+      <TapPoints>
+        ${tapPoints}
+      </TapPoints>
+      <CurrencyName>
+        Golden Credits
+      </CurrencyName>
+      <PointsID>${pointsId}</PointsID>
     </UserAccountObject>
     <Success>true</Success>
     <Message>You successfully spent ${tapPoints} points</Message>
