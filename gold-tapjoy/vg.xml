@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <TapjoyConnectReturnObject>
+    <UserAccountObject>
+      <TapPoints>
+        65009
+      </TapPoints>
+      <CurrencyName>
+        Golden Credits
+      </CurrencyName>
+      <PointsID>
+        15378248
+      </PointsID>
+    </UserAccountObject>
+    <Success>
+      true
+    </Success>
+  </TapjoyConnectReturnObject>
