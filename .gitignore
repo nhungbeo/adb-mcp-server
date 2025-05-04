@@ -27,3 +27,5 @@ build/
 *.swp
 *.swo
 GoogleSignInProcess.md
+gold-tapjoy/vg.xml
+gold-tapjoy/spent.xml

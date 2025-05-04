@@ -96,6 +96,28 @@ class AdbMcpServer {
             required: ["deviceId"],
           },
         },
+        {
+          name: "tap",
+          description: "Tap at specific coordinates on connected Android device",
+          inputSchema: {
+            type: "object",
+            properties: {
+              deviceId: {
+                type: "string",
+                description: "Device ID to execute tap on"
+              },
+              x: {
+                type: "number",
+                description: "X coordinate to tap"
+              },
+              y: {
+                type: "number",
+                description: "Y coordinate to tap"
+              }
+            },
+            required: ["deviceId", "x", "y"]
+          }
+        },
       ],
     }));
 
@@ -177,6 +199,31 @@ class AdbMcpServer {
                 {
                   type: "text",
                   text: result,
+                },
+              ],
+            };
+          }
+          case "tap": {
+            if (!request.params.arguments?.deviceId ||
+                request.params.arguments?.x === undefined ||
+                request.params.arguments?.y === undefined) {
+              throw new McpError(ErrorCode.InvalidParams,
+                "Missing required parameters: deviceId, x, y");
+            }
+
+            const deviceId = request.params.arguments.deviceId;
+            const x = request.params.arguments.x;
+            const y = request.params.arguments.y;
+
+            const result = await executeAdbCommand(
+              `adb -s ${deviceId} shell input tap ${x} ${y}`
+            );
+
+            return {
+              content: [
+                {
+                  type: "text",
+                  text: `Tapped at coordinates (${x}, ${y})`,
                 },
               ],
             };

@@ -9,7 +9,29 @@
 <body>
     <div class="container">
         <h1>ws.tapjoyads.com</h1>
-        <div class="input-group">
+
+        <!-- Form tính toán chia vàng -->
+        <div class="form-section">
+            <h2>Tính toán chia vàng</h2>
+            <div class="input-group">
+                <label for="goldAmount">Số vàng cần chia (K):</label>
+                <input type="number" id="goldAmount" required>
+            </div>
+            <div class="button-group">
+                <button id="calculate">Tính toán</button>
+                <button id="recalculate" style="display: none;">Tính lại</button>
+            </div>
+            <div id="calculation-result" class="calculation-result">
+                <h3>Kết quả tính toán</h3>
+                <p>Tổng số lần chia: <span id="total-splits">0</span></p>
+                <div id="splits-list" class="splits-list"></div>
+            </div>
+        </div>
+
+        <!-- Form tạo XML -->
+        <div class="form-section">
+            <h2>Tạo XML</h2>
+            <div class="input-group">
             <label for="tapPoints">TapPoints:</label>
             <input type="number" id="tapPoints" required>
         </div>
