@@ -6,6 +6,7 @@ import { randomUUID } from "crypto";
 import { handleDeviceListRequest } from "./handlers/deviceList";
 import { handleScreenshotRequest } from "./handlers/screenshot";
 import { handleUiElementsRequest } from "./handlers/uiElements";
+import { handleGetAndroidIpv4Request } from "./handlers/getAndroidIpv4";
 import { executeAdbCommand } from "./utils/adb";
 
 class AdbMcpServer {
@@ -96,6 +97,20 @@ class AdbMcpServer {
             required: ["deviceId"],
           },
         },
+        {
+          name: "get_ipv4_android",
+          description: "Get IPv4 address of connected Android device via WiFi interface",
+          inputSchema: {
+            type: "object",
+            properties: {
+              deviceId: {
+                type: "string",
+                description: "Device ID to get IPv4 from",
+              },
+            },
+            required: ["deviceId"],
+          },
+        },
       ],
     }));
 
@@ -177,6 +192,32 @@ class AdbMcpServer {
                 {
                   type: "text",
                   text: result,
+                },
+              ],
+            };
+          }
+          case "get_ipv4_android": {
+            if (!request.params.arguments?.deviceId) {
+              throw new McpError(ErrorCode.InvalidParams, "Missing required parameter: deviceId");
+            }
+
+            const response = await handleGetAndroidIpv4Request({
+              id: randomUUID(),
+              method: "get_ipv4_android",
+              params: {
+                deviceId: request.params.arguments.deviceId,
+              },
+            });
+
+            if (response.error) {
+              throw new McpError(response.error.code, response.error.message, response.error.data);
+            }
+
+            return {
+              content: [
+                {
+                  type: "text",
+                  text: response.result?.ipv4 || "",
                 },
               ],
             };

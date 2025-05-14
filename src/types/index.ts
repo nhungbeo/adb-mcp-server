@@ -44,3 +44,11 @@ export interface ExecuteAdbCommandParams {
   deviceId: string;
   command: string;
 }
+
+export interface GetAndroidIpv4Params {
+  deviceId: string;
+}
+
+export interface GetAndroidIpv4Result {
+  ipv4: string;
+}
